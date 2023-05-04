@@ -24,7 +24,7 @@ sol2 = ode45(@T,tspan,y2);
 
 % creating the pressure vs. crank angle plot and using subplot so that we can put all 4 of the different graphs on one screen
 subplot(2,2,1)
-plot(sol.y(1,:),'r<-','MarkerSize',4,'LineWidth',1)
+plot(smooth(sol.y(1,:)),'r<-','MarkerSize',4,'LineWidth',1)
 grid on
 xlabel('Crank Angle (rad)')
 ylabel('Pressure (Pa)')
@@ -32,7 +32,7 @@ title('Pressure vs. Crank Angle')
 
 % creating the work vs. crank angle plot
 subplot(2,2,2)
-plot(sol.y(2,:),'b<-','MarkerSize',4,'LineWidth',1)
+plot(smooth(sol.y(2,:)),'b<-','MarkerSize',4,'LineWidth',1)
 grid on
 xlabel('Crank Angle (rad)')
 ylabel('Work (J)')
@@ -40,7 +40,7 @@ title('Work vs. Crank Angle')
 
 % creating the volume vs. crank angle plot
 subplot(2,2,3)
-fplot(@V,'g<-','MarkerSize',4,'LineWidth',1)
+fplot(@V,tspan,'g<-','MarkerSize',4,'LineWidth',1)
 grid on
 xlabel('Crank Angle (rad)')
 ylabel('Volume (cm^3)')
@@ -59,7 +59,7 @@ title('Temperature vs. Crank Angle')
 %% function to solve for the change in pressure and work
 function [dP] = Q1(theta,p)
 gamma = 1.4; 
-dP = [gamma*(p(1)*dV(theta))/V(theta);
+dP = [-gamma*(p(1)*dV(theta))/V(theta);
         p(1)*dV(theta)];
 end
 
@@ -69,9 +69,9 @@ deltaV = 185*sin(theta) + (185*cos(theta)*sin(theta))/(3*(1 - sin(theta)^2/9)^(1
 end
 
 %% function to solve for the change in temperature
-function Temp = T(theta,p)
-R = 287; 
-Temp = (p(1)*V(theta))/(pi*(R));
+function [Temp] = T(theta,p)
+R = 287; M0 = 58.8269;
+Temp = (p(1)*V(theta))/((M0)*(R));
 end
 
 %% function to solve for the volume with respect to theta
