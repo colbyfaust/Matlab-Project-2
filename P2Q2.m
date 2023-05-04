@@ -39,7 +39,22 @@ elseif  (theta_s+theta_b <=  theta) && (theta<=3*pi)
 end
 end
  
+ 
+function Derx = dx(theta)
+gamma = 1.4; R = 287; r = 8.4; L = 12; S = 8; V0 = 50; b = 9; T1 = 300;
+theta_s = 3*pi/2; ; q_in = 2.8*10^6; Tw = 300;E = 8/(2*12); theta_b = pi;
 
+if (pi<= theta)&& (theta <= theta_s)
+
+    Derx = 0;
+elseif (theta_s <= theta) && (theta <= theta_s+theta_b)
+
+    Derx = sin(theta - (3*pi)/2)/2;
+elseif  (theta_s+theta_b <=  theta) && (theta<=3*pi)
+
+    Derx = 0;
+end
+end
 
 
 
